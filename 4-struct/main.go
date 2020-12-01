@@ -11,6 +11,18 @@ func main() {
 type User struct {
 	FirstName string
 	LastName  string
+	DBFields
+	OptionalFields
+}
+
+func NewUser(fn, ln string, optional *OptionalFields) *User {
+	var u User
+	u.FirstName = fn
+	u.LastName = ln
+	if optional != nil {
+		u.OptionalFields = *optional
+	}
+	return &u
 }
 
 type DBFields struct {
