@@ -2,9 +2,11 @@ package main
 
 import (
 	"log"
+	"math/rand"
 	"os"
 	"strings"
 	"text/template"
+	"time"
 )
 
 func main() {
@@ -26,6 +28,23 @@ func main() {
 
 var funcMap = template.FuncMap{
 	"title": strings.Title,
+	"upper": strings.ToUpper,
+	"rand":  TextRandom,
+}
+
+func TextRandom(str string) string {
+	return stringWithCharset(len(str), str)
+}
+
+var seededRand *rand.Rand = rand.New(
+	rand.NewSource(time.Now().UnixNano()))
+
+func stringWithCharset(length int, charset string) string {
+	b := make([]byte, length)
+	for i := range b {
+		b[i] = charset[seededRand.Intn(len(charset))]
+	}
+	return string(b)
 }
 
 // Define a template.
@@ -34,7 +53,7 @@ Le bonheur d'aimer.
 Recueil : Les élégies et poésies diverses (1813)
 
 Il est auprès de moi, sa main presse ma main,
-Sa bouche s'embellit du plus charmant {{ .sourire}},
+Sa bouche s'embellit du plus charmant {{ rand .sourire}},
 Son teint s'anime, je {{ .soupire }},
 Sa tête mollement vient tomber sur mon sein ;
 Là je respire son {{ .haleine }},
@@ -50,6 +69,6 @@ Ils se disent tout bas :
 {{ title .toujours }}, {{ .toujours }}, {{ .toujours }} !
 
 
-{{ .Signé }}
+{{ upper .Signé }}
 
 `
