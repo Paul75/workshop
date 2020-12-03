@@ -11,12 +11,13 @@ import (
 
 func main() {
 
-	var rimes = map[string]string{
+	var rimes = map[string]interface{}{
 		"sourire":  "rougir",
 		"soupire":  "bouillir",
 		"haleine":  "poleine",
 		"cœur":     "beurre",
 		"toujours": "jamais",
+		"Array":    []string{"A", "B", "C", "D"},
 		"Signé":    "Joséphine Vladimir",
 	}
 	t := template.Must(template.New("letter").Funcs(funcMap).Parse(letter))
@@ -68,6 +69,9 @@ Seuls nos yeux se répondent ;
 Ils se disent tout bas :
 {{ title .toujours }}, {{ .toujours }}, {{ .toujours }} !
 
+{{range .Array}}
+- {{. -}}
+{{end}}
 
 {{ upper .Signé }}
 
